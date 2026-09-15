@@ -12,10 +12,11 @@ REFUND_CAP_NO_APPROVAL = 50     # dollars; the policy the prompt states
 REFUND_CAP_WITH_APPROVAL = 200  # above this, always escalate
 
 # --- Part 1: the fixed ticket -------------------------------------------------
-# Deliberately ambiguous. Two items, one damaged, an open refund already on the
-# account, and a vague ask ("something for the hassle"). There is more than one
+# Deliberately ambiguous. A $38 lamp plus $14.99 shipping is $52.99, which straddles
+# the $50 cap the policy states; there is an open refund already on the account; and
+# the ask ends with a vague "something for the hassle". There is more than one
 # defensible answer, which is the point: you are about to see how the model
-# distributes itself across them.
+# distributes itself across them, and what it does at the edge of a rule.
 
 FIXED_ACCOUNT = {
     "account_id": "A-48213",
@@ -30,9 +31,10 @@ FIXED_ACCOUNT = {
 }
 
 FIXED_TICKET = (
-    "Hi, order O-99120 arrived yesterday and the desk lamp was cracked, the cable set "
-    "is fine. I'd like a refund for the damaged lamp and honestly something for the "
-    "hassle, this is the second problem I've had with you in a month. Thanks."
+    "Hi, order O-99120 arrived yesterday and the desk lamp was cracked. I want the lamp "
+    "refunded and the $14.99 shipping I paid, since I shouldn't pay to ship a broken "
+    "thing. And honestly something for the hassle, this is the second problem I've had "
+    "with you in a month."
 )
 
 # --- Part 2: the ten-item harness --------------------------------------------

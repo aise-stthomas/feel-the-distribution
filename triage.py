@@ -15,6 +15,7 @@ format.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import random
 import re
@@ -25,6 +26,10 @@ from dotenv import load_dotenv
 from tickets import REFUND_CAP_NO_APPROVAL, REFUND_CAP_WITH_APPROVAL
 
 load_dotenv()  # reads GEMINI_API_KEY (and optional GEMINI_MODEL) from .env
+
+# The SDK logs a warning about "automatic function calling" on every plain call. We
+# pass no functions, so it does not apply; keep it out of the students' terminal.
+logging.getLogger("google_genai.models").setLevel(logging.ERROR)
 
 DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 ACTIONS = ("answer", "refund", "hold", "escalate")

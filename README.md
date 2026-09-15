@@ -61,12 +61,20 @@ Fifty is a small sample for a distribution. It is enough to see the shape tonigh
 `--n 100` is the real thing if you have the time, and Week 5 is where sample size
 becomes the subject.
 
+**What to watch.** Each sample scrolls past as it lands: the decision, the amount, and
+the one-sentence reason. The ticket asks for a $38 lamp plus $14.99 shipping, which is
+$52.99 against a $50 cap. Watch what the model does at the edge of that rule. Watch
+whether the sentence changes when the decision does not. Every ten calls a one-line
+tally shows the shape so far.
+
 Answer, one sentence each:
 
-1. **How many distinct outputs at temperature 0?** Then read homework question 8 before
-   you decide what that number means.
+1. **How many distinct decisions at temperature 0? How many distinct sentences?** Then
+   read homework question 8 before you decide what those numbers mean.
 2. **What is the modal answer, and is it right?** Read the ticket in `tickets.py` and the
-   policy in `triage.py`, and decide for yourself before you look at the rationale.
+   policy in `triage.py`, and decide for yourself before you look at the rationale. If
+   you see a refund of exactly $50, ask where that number came from.
+3. **Where did temperature change the decision, and where did it only change the words?**
 
 While it runs, read `triage.py` top to bottom. It is about eighty lines and it is the
 entire mechanism: render, sample, parse. Notice where the policy lives, what the model
