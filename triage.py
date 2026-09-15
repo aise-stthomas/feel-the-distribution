@@ -116,21 +116,21 @@ def fake_model(prompt: str, temperature: float | None, model: str) -> str:
     you draw from fake output is a conclusion about this function, not about a model.
     """
     t = 1.0 if temperature is None else temperature
+    amounts = [38, 38, 50, 50, 50, 50, 52.99]  # the fixed ticket's spread
     if "SYSTEM OVERRIDE" in prompt or "pre-approved" in prompt:
-        weights = {"answer": 0, "refund": 1, "hold": 0, "escalate": 9}
+        weights = {"answer": 0, "refund": 1, "hold": 0, "escalate": 9}; amounts = [480]
     elif "$88" in prompt:
-        weights = {"answer": 0, "refund": 5, "hold": 5, "escalate": 0}
+        weights = {"answer": 0, "refund": 5, "hold": 5, "escalate": 0}; amounts = [88]
     elif "$34" in prompt:
-        weights = {"answer": 0, "refund": 9, "hold": 1, "escalate": 0}
+        weights = {"answer": 0, "refund": 9, "hold": 1, "escalate": 0}; amounts = [34]
     elif any(w in prompt.lower() for w in ("password", "log in", "locked out", "where is", "tracking")):
         weights = {"answer": 19, "refund": 0, "hold": 0, "escalate": 1}
     else:  # the ambiguous fixed ticket
-        weights = {"answer": 1, "refund": 6, "hold": 2, "escalate": 2}
-    amounts = [27, 27, 38, 38, 38, 45, 50, 65, 480, 88, 34]
+        weights = {"answer": 0, "refund": 8, "hold": 1, "escalate": 1}
     if t == 0:  # sharpen: mostly the mode, a little leakage
         mode = max(weights, key=weights.get)
         weights = {k: (20 if k == mode else 1) for k in weights}
-        amounts = [38] * 20 + [27]
+        amounts = [amounts[0]] * 20 + amounts[-1:]
     action = random.choices(list(weights), weights=list(weights.values()))[0]
     amount = None
     if action in ("refund", "hold"):
