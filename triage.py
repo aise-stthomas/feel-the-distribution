@@ -93,8 +93,10 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
         except errors.ClientError as e:
             if e.code != 429:
                 raise
-            if "day" in str(e).lower():  # per-day quota, not per-minute: waiting will not help
-                raise SystemExit(f"\nDaily quota exhausted for {model}. {switch}")
+            msg = getattr(e, "message", str(e))
+            if any(w in msg.lower() for w in ("day", "depleted", "billing", "credits")):
+                # A per-day cap or a billing problem, not a per-minute limit: waiting will not help.
+                raise SystemExit(f"\n{model} refused: {msg[:200]}\n{switch}")
             print(f"    rate limited; sleeping {delay}s", flush=True)
             time.sleep(delay)
         except errors.ServerError as e:
