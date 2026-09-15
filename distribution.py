@@ -1,9 +1,10 @@
 """Part 1: feel the distribution.
 
-One fixed ticket. One hundred calls at temperature 0, one hundred at the default.
+One fixed ticket. Fifty calls at temperature 0, fifty at the default.
 Plot the action the model chose and the refund amount it proposed.
 
-    uv run distribution.py                 # live, 100 calls per temperature
+    uv run distribution.py                 # live, 50 calls per temperature (~4 min)
+    uv run distribution.py --n 100         # the real thing, if you have the time
     uv run distribution.py --n 20          # a quick look
     uv run distribution.py --provider fake # plumbing check, no key, NOT a model
     uv run distribution.py --replay runs/distribution.jsonl   # re-plot a saved run
@@ -108,7 +109,7 @@ def plot(records: list[dict], out: Path) -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--n", type=int, default=100, help="calls per temperature (default 100)")
+    p.add_argument("--n", type=int, default=50, help="calls per temperature (default 50)")
     p.add_argument("--temperatures", nargs="+", default=["0", "default"],
                    help="temperatures to run; 'default' means the provider's default")
     p.add_argument("--model", default=DEFAULT_MODEL)

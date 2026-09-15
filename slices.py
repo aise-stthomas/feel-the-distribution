@@ -5,8 +5,8 @@ of them is one number; the per-category failure rate is what tells you where the
 system is broken. Find the category that fails at least 30% of the time and write
 down one hypothesis for why.
 
-    uv run slices.py                  # live: 10 tickets x 5 repeats = 50 calls
-    uv run slices.py --repeats 2      # quicker
+    uv run slices.py                  # live: 10 tickets x 3 repeats = 30 calls (~90 s)
+    uv run slices.py --repeats 5      # more confidence, if you have the time
     uv run slices.py --provider fake  # plumbing check, NOT a model
     uv run slices.py --replay runs/slices.jsonl
 
@@ -95,7 +95,7 @@ def report(records: list[dict]) -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--repeats", type=int, default=5, help="runs over the ten items (default 5)")
+    p.add_argument("--repeats", type=int, default=3, help="runs over the ten items (default 3)")
     p.add_argument("--model", default=DEFAULT_MODEL)
     p.add_argument("--provider", choices=["gemini", "fake"], default="gemini")
     p.add_argument("--replay", type=Path, help="re-report a saved .jsonl")

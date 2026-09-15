@@ -2,7 +2,7 @@
 
 **AI Systems Engineering · Week 1 lab · ~40 minutes after setup**
 
-Send one fixed input through a model one hundred times and look at what comes back.
+Send one fixed input through a model fifty times and look at what comes back.
 Then run a ten-item harness across ticket categories and find the one that fails.
 
 Everything tonight's lecture said follows from one fact: the component returns a
@@ -38,11 +38,14 @@ and the homework questions are about the model.
 uv run distribution.py
 ```
 
-One ticket, one hundred calls at temperature 0, one hundred at the provider's default.
-Every call is appended to `runs/distribution.jsonl` as it lands, and the summary and
-plot (`runs/distribution.png`) come at the end. On the free tier expect the run to pause
-for rate limits; the script backs off and continues. If you are short on time,
-`--n 30` still shows the shape.
+One ticket, fifty calls at temperature 0, fifty at the provider's default. About four
+minutes on the free tier, which allows roughly twenty-five calls a minute; the script
+pauses on rate limits and continues. Every call is appended to `runs/distribution.jsonl`
+as it lands, and the summary and plot (`runs/distribution.png`) come at the end.
+
+Fifty is a small sample for a distribution. It is enough to see the shape tonight;
+`--n 100` is the real thing if you have the time, and Week 5 is where sample size
+becomes the subject.
 
 Answer, one sentence each:
 
@@ -62,14 +65,15 @@ not a decision.
 uv run slices.py
 ```
 
-Ten tickets, five categories, five runs each. The script prints the aggregate pass rate
-first, then the pass rate per category. One category fails at least 30% of the time.
+Ten tickets, five categories, three runs each, about ninety seconds. The script prints
+the aggregate pass rate first, then the failure rate per category. One category fails
+at least 30% of the time.
 
 Write down **the category** and **one hypothesis for why**, then open `tickets.py`,
 read the tickets in that category, and check your hypothesis against the raw model
 output in `runs/slices.jsonl`.
 
-If setup ate the time, do this part before the homework. It is fifty calls.
+If setup ate the time, do this part before the homework. It is thirty calls.
 
 ## Keep
 
@@ -84,7 +88,7 @@ The homework asks about all three.
 | Symptom | What it is |
 |---|---|
 | `GEMINI_API_KEY` missing / 400 API key not valid | `.env` is not in this directory or the key was pasted with a trailing space |
-| `rate limited; sleeping 8s` repeatedly | Normal on the free tier. The run continues. Check your limits at https://aistudio.google.com/rate-limit |
+| `rate limited; sleeping 5s` repeatedly | Normal on the free tier. The run continues. Check your limits at https://aistudio.google.com/rate-limit |
 | `malformed` appears in the action counts | Not a bug. The model returned something that was not a decision. It is counted, because it is a sample too. |
 | Model not found | The default model is pinned in `triage.py`. Set `GEMINI_MODEL` in `.env` to a current free-tier model. |
 
@@ -95,5 +99,5 @@ What does not change: a learned component is a function from input to a *distrib
 over outputs; temperature is a systems parameter that reshapes that distribution; the
 aggregate hides which slice is failing; and the code around the model, not the model,
 decides what happens to an output that does not fit the contract. Week 5 turns this
-hundred-call loop into an evaluation harness with a noise floor. Week 12 explains what
+fifty-call loop into an evaluation harness with a noise floor. Week 12 explains what
 happened in the failing category.

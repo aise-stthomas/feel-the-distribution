@@ -64,8 +64,9 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
     softmax over the next token: 0 sharpens the distribution toward the most likely
     token, it does not turn the model into a function. You will see that in the data.
 
-    Retries on rate limits (HTTP 429) with backoff, because the free tier *is* a rate
-    limit and the run should finish rather than crash at call 37.
+    Retries on rate limits (HTTP 429) with a short sleep, because the free tier *is* a
+    per-minute rate limit: a 429 means "the minute is not over yet", not "back off for
+    a long time". The run should finish rather than crash at call 37.
     """
     from google import genai
     from google.genai import errors, types
@@ -76,8 +77,8 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
         response_mime_type="application/json",  # a request for JSON, not a guarantee
         max_output_tokens=300,
     )
-    delay = 8
-    for attempt in range(6):
+    delay = 5
+    for attempt in range(30):
         try:
             resp = client.models.generate_content(model=model, contents=prompt, config=config)
             return resp.text or ""
@@ -86,11 +87,10 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
                 raise
             print(f"    rate limited; sleeping {delay}s", flush=True)
             time.sleep(delay)
-            delay = min(delay * 2, 60)
         except errors.ServerError:
             print(f"    server error; sleeping {delay}s", flush=True)
             time.sleep(delay)
-    raise RuntimeError("gave up after repeated rate limits; wait a minute and rerun")
+    raise RuntimeError("gave up after repeated rate limits; check your daily quota and rerun")
 
 
 def fake_model(prompt: str, temperature: float | None, model: str) -> str:
