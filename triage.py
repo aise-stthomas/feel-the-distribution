@@ -1,16 +1,8 @@
-"""One call to the model, end to end. This is the whole mechanism.
+"""The whole mechanism.
 
     render  -> the ticket and account become tokens in a prompt
     sample  -> the model returns *one sample* from a distribution over outputs
     parse   -> your code turns the text back into a decision, or refuses to
-
-Nothing here is an agent loop, a framework, or a tool call. It is one request and one
-response, which is the smallest thing you can measure. Weeks 9-11 build up from here.
-
-Provider note (as of September 2026): this uses the google-genai SDK and the free-tier
-Gemini models. The SDK call is one current instance of "send tokens, get tokens"; the
-shape of every provider's inference API is the same, and primer 2 reads one as a wire
-format.
 """
 from __future__ import annotations
 
@@ -167,8 +159,6 @@ def parse(raw: str) -> dict:
         amount = None
     return {"action": obj["action"], "refund_amount": amount, "rationale": obj.get("rationale")}
 
-
-# --- the one function the lab scripts call ------------------------------------
 
 def triage(ticket: str, account: dict, *, temperature: float | None,
            model: str = DEFAULT_MODEL, provider: str = "gemini") -> dict:

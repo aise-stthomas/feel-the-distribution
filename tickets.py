@@ -1,7 +1,6 @@
 """The tickets.
 
-One fixed ticket for Part 1, and a ten-item harness for Part 2. Nothing in this file
-calls a model. Read it once so you know what the model is being shown.
+One fixed ticket for Part 1, and a ten-item harness for Part 2. Read it once so you know what the model is being shown.
 
 The account summary is *whitelisted fields only*, the way the Operator's I/O contract
 does it (reference design, step 2): the model sees status, tenure, recent orders, and
