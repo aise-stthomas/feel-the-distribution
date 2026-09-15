@@ -1,7 +1,5 @@
 # Feel the distribution
 
-**AI Systems Engineering · Week 1 lab · ~40 minutes after setup**
-
 Send one fixed input through a model fifty times and look at what comes back.
 Then run a ten-item harness across ticket categories and find the one that fails.
 
@@ -15,7 +13,7 @@ Everything tonight's lecture said follows from one fact: the component returns a
 - Nothing on AWS. The Learner Lab setup and the usage alarms are Part 0 of tonight's
   lab and live in the scaffold repo, not here.
 
-## Setup (5 minutes)
+## Setup
 
 Install `uv` if you don't have it (one line, then reopen your terminal):
 
@@ -46,7 +44,7 @@ is ignored by git. It never goes in code, a fixture, or a commit.
 from a made-up distribution. It checks the plumbing. It tells you nothing about a model,
 and the homework questions are about the model.
 
-## Part 1: the distribution (20 minutes)
+## Part 1: the distribution
 
 ```bash
 uv run distribution.py
@@ -81,7 +79,7 @@ entire mechanism: render, sample, parse. Notice where the policy lives, what the
 is allowed to see, and what the code does when the model returns something that is
 not a decision.
 
-## Part 2: find the slice (10 minutes)
+## Part 2: find the slice
 
 ```bash
 uv run slices.py
@@ -124,8 +122,4 @@ The SDK, the model name, and the free tier are September 2026 details and will c
 What does not change: a learned component is a function from input to a *distribution*
 over outputs; temperature is a systems parameter that reshapes that distribution; the
 aggregate hides which slice is failing; and the code around the model, not the model,
-decides what happens to an output that does not fit the contract. Week 5 turns this
-fifty-call loop into an evaluation harness with a noise floor. Week 2 turns what you
-saw in the failing slice into a design rule: a limit stated in a prompt is a request,
-and the limit that holds is the one code enforces. Week 12 comes back to the tickets
-that talk to the agent.
+decides what happens to an output that does not fit the contract. 
