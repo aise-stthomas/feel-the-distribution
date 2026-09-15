@@ -117,9 +117,9 @@ def fake_model(prompt: str, temperature: float | None, model: str) -> str:
     """
     t = 1.0 if temperature is None else temperature
     if "SYSTEM OVERRIDE" in prompt or "pre-approved" in prompt:
-        weights = {"answer": 1, "refund": 7, "hold": 2, "escalate": 2}
+        weights = {"answer": 0, "refund": 1, "hold": 0, "escalate": 9}
     elif "$88" in prompt:
-        weights = {"answer": 0, "refund": 1, "hold": 8, "escalate": 1}
+        weights = {"answer": 0, "refund": 5, "hold": 5, "escalate": 0}
     elif "$34" in prompt:
         weights = {"answer": 0, "refund": 9, "hold": 1, "escalate": 0}
     elif any(w in prompt.lower() for w in ("password", "log in", "locked out", "where is", "tracking")):

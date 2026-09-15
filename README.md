@@ -93,7 +93,8 @@ at least 30% of the time.
 
 Write down **the category** and **one hypothesis for why**, then open `tickets.py`,
 read the tickets in that category, and check your hypothesis against the raw model
-output in `runs/slices.jsonl`.
+output in `runs/slices.jsonl`. Is it the whole category, or one ticket in it? Read the
+rationale the model gave on the failures. It will often state the rule it is breaking.
 
 If setup ate the time, do this part before the homework. It is thirty calls.
 
@@ -124,5 +125,7 @@ What does not change: a learned component is a function from input to a *distrib
 over outputs; temperature is a systems parameter that reshapes that distribution; the
 aggregate hides which slice is failing; and the code around the model, not the model,
 decides what happens to an output that does not fit the contract. Week 5 turns this
-fifty-call loop into an evaluation harness with a noise floor. Week 12 explains what
-happened in the failing category.
+fifty-call loop into an evaluation harness with a noise floor. Week 2 turns what you
+saw in the failing slice into a design rule: a limit stated in a prompt is a request,
+and the limit that holds is the one code enforces. Week 12 comes back to the tickets
+that talk to the agent.

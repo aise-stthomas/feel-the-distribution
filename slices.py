@@ -91,6 +91,7 @@ def report(records: list[dict]) -> None:
     print(f"\ntable: {md}")
     print("\nWrite down: the category that fails at least 30% of the time, and ONE hypothesis for why.")
     print("Then look at the tickets in that category in tickets.py and check your hypothesis against the raw output.")
+    print("Is it the whole category that fails, or one ticket in it? What is different about that ticket?")
 
 
 def main() -> None:
