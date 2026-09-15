@@ -17,6 +17,20 @@ Everything tonight's lecture said follows from one fact: the component returns a
 
 ## Setup (5 minutes)
 
+Install `uv` if you don't have it (one line, then reopen your terminal):
+
+```bash
+# macOS / Linux / WSL
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+```powershell
+# Windows PowerShell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Then:
+
 ```bash
 git clone https://github.com/aise-stthomas/feel-the-distribution
 cd feel-the-distribution
