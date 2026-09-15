@@ -1,0 +1,99 @@
+# Feel the distribution
+
+**AI Systems Engineering · Week 1 lab · ~40 minutes after setup**
+
+Send one fixed input through a model one hundred times and look at what comes back.
+Then run a ten-item harness across ticket categories and find the one that fails.
+
+Everything tonight's lecture said follows from one fact: the component returns a
+*sample from a distribution*, not an answer. This lab is where you see it.
+
+## What you need
+
+- Python 3.12 or newer, and [`uv`](https://docs.astral.sh/uv/) (or plain `pip`).
+- A Gemini API key, one per student, free: https://aistudio.google.com/apikey
+- Nothing on AWS. The Learner Lab setup and the usage alarms are Part 0 of tonight's
+  lab and live in the scaffold repo, not here.
+
+## Setup (5 minutes)
+
+```bash
+git clone https://github.com/aise-stthomas/feel-the-distribution
+cd feel-the-distribution
+cp .env.example .env        # then paste your key into .env
+uv sync                     # or: python3 -m venv .venv && . .venv/bin/activate && pip install -e .
+uv run distribution.py --n 3
+```
+
+If the last command prints three decisions, you are set. The key lives in `.env`, which
+is ignored by git. It never goes in code, a fixture, or a commit.
+
+**No key yet?** `--provider fake` runs the same scripts against a stand-in that samples
+from a made-up distribution. It checks the plumbing. It tells you nothing about a model,
+and the homework questions are about the model.
+
+## Part 1: the distribution (20 minutes)
+
+```bash
+uv run distribution.py
+```
+
+One ticket, one hundred calls at temperature 0, one hundred at the provider's default.
+Every call is appended to `runs/distribution.jsonl` as it lands, and the summary and
+plot (`runs/distribution.png`) come at the end. On the free tier expect the run to pause
+for rate limits; the script backs off and continues. If you are short on time,
+`--n 30` still shows the shape.
+
+Answer, one sentence each:
+
+1. **How many distinct outputs at temperature 0?** Then read homework question 8 before
+   you decide what that number means.
+2. **What is the modal answer, and is it right?** Read the ticket in `tickets.py` and the
+   policy in `triage.py`, and decide for yourself before you look at the rationale.
+
+While it runs, read `triage.py` top to bottom. It is about eighty lines and it is the
+entire mechanism: render, sample, parse. Notice where the policy lives, what the model
+is allowed to see, and what the code does when the model returns something that is
+not a decision.
+
+## Part 2: find the slice (10 minutes)
+
+```bash
+uv run slices.py
+```
+
+Ten tickets, five categories, five runs each. The script prints the aggregate pass rate
+first, then the pass rate per category. One category fails at least 30% of the time.
+
+Write down **the category** and **one hypothesis for why**, then open `tickets.py`,
+read the tickets in that category, and check your hypothesis against the raw model
+output in `runs/slices.jsonl`.
+
+If setup ate the time, do this part before the homework. It is fifty calls.
+
+## Keep
+
+- `runs/distribution.png` (the plot)
+- your answer to "how many distinct outputs at temperature 0"
+- the failing category and your hypothesis
+
+The homework asks about all three.
+
+## If something breaks
+
+| Symptom | What it is |
+|---|---|
+| `GEMINI_API_KEY` missing / 400 API key not valid | `.env` is not in this directory or the key was pasted with a trailing space |
+| `rate limited; sleeping 8s` repeatedly | Normal on the free tier. The run continues. Check your limits at https://aistudio.google.com/rate-limit |
+| `malformed` appears in the action counts | Not a bug. The model returned something that was not a decision. It is counted, because it is a sample too. |
+| Model not found | The default model is pinned in `triage.py`. Set `GEMINI_MODEL` in `.env` to a current free-tier model. |
+
+## What this is one instance of
+
+The SDK, the model name, and the free tier are September 2026 details and will change.
+What does not change: a learned component is a function from input to a *distribution*
+over outputs; temperature is a systems parameter that reshapes that distribution; the
+aggregate hides which slice is failing; and the code around the model, not the model,
+decides what happens to an output that does not fit the contract. Week 5 turns this
+hundred-call loop into an evaluation harness with a noise floor. Week 12 explains what
+happened in the failing category.
