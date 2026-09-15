@@ -82,7 +82,10 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
         response_mime_type="application/json",  # a request for JSON, not a guarantee
         max_output_tokens=300,
     )
+    switch = ("Set GEMINI_MODEL in .env to another free-tier model (for example "
+              "gemini-2.5-flash-lite) and rerun; a saved run replays with --replay.")
     delay = 5
+    server_errors = 0
     for attempt in range(30):
         try:
             resp = client.models.generate_content(model=model, contents=prompt, config=config)
@@ -90,12 +93,19 @@ def call_model(prompt: str, temperature: float | None, model: str) -> str:
         except errors.ClientError as e:
             if e.code != 429:
                 raise
+            if "day" in str(e).lower():  # per-day quota, not per-minute: waiting will not help
+                raise SystemExit(f"\nDaily quota exhausted for {model}. {switch}")
             print(f"    rate limited; sleeping {delay}s", flush=True)
             time.sleep(delay)
-        except errors.ServerError:
-            print(f"    server error; sleeping {delay}s", flush=True)
+        except errors.ServerError as e:
+            server_errors += 1
+            if server_errors == 1:
+                print(f"    server error {e.code}: {getattr(e, 'message', str(e))[:120]}", flush=True)
+            if server_errors >= 5:
+                raise SystemExit(f"\n{model} keeps returning {e.code}; that is the provider, not you. {switch}")
+            print(f"    retrying in {delay}s", flush=True)
             time.sleep(delay)
-    raise RuntimeError("gave up after repeated rate limits; check your daily quota and rerun")
+    raise SystemExit(f"\nGave up after repeated rate limits on {model}. {switch}")
 
 
 def fake_model(prompt: str, temperature: float | None, model: str) -> str:

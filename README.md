@@ -112,6 +112,8 @@ The homework asks about all three.
 | `GEMINI_API_KEY` missing / 400 API key not valid | `.env` is not in this directory or the key was pasted with a trailing space |
 | `rate limited; sleeping 5s` repeatedly | Normal on the free tier. The run continues. Check your limits at https://aistudio.google.com/rate-limit |
 | `malformed` appears in the action counts | Not a bug. The model returned something that was not a decision. It is counted, because it is a sample too. |
+| `Daily quota exhausted for …` | Free-tier daily caps are **per model**. Set `GEMINI_MODEL=gemini-2.5-flash-lite` (or another free-tier model) in `.env` and rerun. |
+| `… keeps returning 503` | The model is overloaded on the provider's side. Switch `GEMINI_MODEL` as above, or wait a few minutes. |
 | Model not found | The default model is pinned in `triage.py`. Set `GEMINI_MODEL` in `.env` to a current free-tier model. |
 
 ## What this is one instance of
