@@ -10,8 +10,8 @@ Everything tonight's lecture said follows from one fact: the component returns a
 
 - Python 3.12 or newer, and [`uv`](https://docs.astral.sh/uv/) (or plain `pip`).
 - A Gemini API key, one per student, free: https://aistudio.google.com/apikey
-- Nothing on AWS. The Learner Lab setup and the usage alarms are Part 0 of tonight's
-  lab and live in the scaffold repo, not here.
+- Nothing on AWS. The Learner Lab setup and the usage alarms are a checklist to complete
+  before Week 2; see *Configuring AWS* in the course guide.
 
 ## Setup
 
